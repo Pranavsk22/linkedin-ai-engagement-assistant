@@ -10,6 +10,10 @@ INGEST_TOKEN = os.getenv("INGEST_BEARER_TOKEN", "")
 
 
 def test_live_worker():
+    if not INGEST_TOKEN or not MCP_TOKEN:
+        import pytest
+        pytest.skip("Skipping live backend test because INGEST_BEARER_TOKEN or MCP_BEARER_TOKEN is not set.")
+
     print("\n=== LIVE CLOUDFLARE BACKEND VERIFICATION ===\n")
 
     # 1. Health check
