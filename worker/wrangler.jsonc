@@ -3,12 +3,14 @@
   "name": "linkedin-ai-engagement",
   "main": "src/index.ts",
   "compatibility_date": "2025-02-14",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "linkedin-ai-engagement",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "d1b3be86-c7dc-4f7b-ab2d-effef80bf0dc",
       "migrations_dir": "migrations"
     }
   ],
