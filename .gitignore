@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+venv/
+node_modules/
+.wrangler/
+.dev.vars
+output/
+output.json
+output.csv
+*.csv
+discovery_output.*

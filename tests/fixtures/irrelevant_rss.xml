@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Baking and Gardening</title>
+    <link>https://baking.example.com</link>
+    <item>
+      <title>Best Sourdough Bread Techniques for Beginners</title>
+      <link>https://baking.example.com/sourdough-guide</link>
+      <description>Learn how to feed your starter and bake crusty artisan bread at home with simple flour and water.</description>
+      <pubDate>Tue, 17 Nov 2026 08:00:00 GMT</pubDate>
+      <author>Chef Alice</author>
+    </item>
+  </channel>
+</rss>

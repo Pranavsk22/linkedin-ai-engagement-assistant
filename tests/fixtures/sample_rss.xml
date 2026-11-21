@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>AI Engineering Insights</title>
+    <link>https://example.com</link>
+    <description>Latest in production AI and LLMs</description>
+    <item>
+      <title>Scaling RAG with Hybrid Search: BM25 and Vector Reranking in Production</title>
+      <link>https://example.com/posts/scaling-rag?utm_source=twitter&amp;utm_medium=social#discussion</link>
+      <description>&lt;p&gt;In this article, we built and deployed a production hybrid search pipeline combining BM25 and dense retrieval embeddings. We measured precision@k and recall@k benchmarks under 50ms latency constraints. What are the biggest trade-offs between reranking latency and recall?&lt;/p&gt;</description>
+      <pubDate>Fri, 20 Nov 2026 12:00:00 GMT</pubDate>
+      <author>Dr. Jane Doe</author>
+    </item>
+    <item>
+      <title>LLM Evaluation Frameworks: Benchmarking Faithfulness and Hallucination</title>
+      <link>https://example.com/evals/ragas-benchmarks?ref=newsletter</link>
+      <description>We implemented an observability and evaluation pipeline using RAGAS. Our experiment tested faithfulness across 10,000 cases. Production architecture trade-offs were examined.</description>
+      <pubDate>Thu, 19 Nov 2026 09:30:00 GMT</pubDate>
+      <author>Dev Team</author>
+    </item>
+  </channel>
+</rss>

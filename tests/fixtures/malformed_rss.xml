@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Edge Cases and Malformed Feed</title>
+    <link>https://malformed.example.com</link>
+    <item>
+      <!-- Missing title completely -->
+      <link>https://malformed.example.com/post-no-title?utm_campaign=spam</link>
+      <description>Text about agents and tool calling without any title.</description>
+      <pubDate>Mon, 10 Nov 2026 10:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Broken Date and Bad HTML</title>
+      <link>https://malformed.example.com/post-bad-html?id=42&amp;utm_source=rss</link>
+      <description>&lt;script&gt;alert('xss');&lt;/script&gt;&lt;p&gt;Evaluating &amp;amp; deploying LLM applications with &lt;b&gt;precision@k&lt;/b&gt;.&lt;iframe src="evil.com"&gt;&lt;/iframe&gt;</description>
+      <pubDate>Not-A-Valid-Date-String-12345</pubDate>
+    </item>
+    <item>
+      <title>No Link Post</title>
+      <description>This post has no link or URL.</description>
+    </item>
+  </channel>
+</rss>

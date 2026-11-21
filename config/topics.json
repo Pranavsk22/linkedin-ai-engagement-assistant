@@ -1,0 +1,169 @@
+{
+  "topics": [
+    {
+      "name": "RAG",
+      "priority": 10,
+      "keywords": [
+        "retrieval-augmented generation",
+        "retrieval augmented generation",
+        "hybrid search",
+        "bm25",
+        "vector search",
+        "reranking",
+        "reranker",
+        "chunking",
+        "embeddings",
+        "dense retrieval",
+        "rag"
+      ]
+    },
+    {
+      "name": "AI Engineering",
+      "priority": 10,
+      "keywords": [
+        "production ai",
+        "llm applications",
+        "llm application",
+        "deployment",
+        "observability",
+        "model serving",
+        "reliability",
+        "ai engineering",
+        "prompt caching"
+      ]
+    },
+    {
+      "name": "LLM Evaluation",
+      "priority": 10,
+      "keywords": [
+        "llm evaluation",
+        "evaluation",
+        "ragas",
+        "faithfulness",
+        "precision@k",
+        "recall@k",
+        "benchmarks",
+        "hallucination",
+        "evals",
+        "groundedness"
+      ]
+    },
+    {
+      "name": "LLMs",
+      "priority": 9,
+      "keywords": [
+        "large language models",
+        "large language model",
+        "context windows",
+        "context window",
+        "inference",
+        "reasoning",
+        "grounding",
+        "llm",
+        "llms"
+      ]
+    },
+    {
+      "name": "Agentic AI",
+      "priority": 9,
+      "keywords": [
+        "ai agents",
+        "ai agent",
+        "tool calling",
+        "orchestration",
+        "multi-agent systems",
+        "multi-agent",
+        "mcp",
+        "model context protocol",
+        "agentic"
+      ]
+    },
+    {
+      "name": "AI Startups",
+      "priority": 8,
+      "keywords": [
+        "ai startup",
+        "ai startups",
+        "ai product",
+        "ai founder",
+        "product engineering"
+      ]
+    },
+    {
+      "name": "Fine-tuning and Transformers",
+      "priority": 8,
+      "keywords": [
+        "transformers",
+        "attention mechanism",
+        "lora",
+        "qlora",
+        "peft",
+        "fine-tuning",
+        "finetuning",
+        "quantization"
+      ]
+    },
+    {
+      "name": "Multimodal AI",
+      "priority": 7,
+      "keywords": [
+        "multimodal",
+        "vision-language model",
+        "vlm",
+        "speech",
+        "audio-language model",
+        "vision model"
+      ]
+    }
+  ],
+  "technical_depth_keywords": [
+    "architecture",
+    "evaluation",
+    "benchmark",
+    "latency",
+    "trade-off",
+    "tradeoff",
+    "failure mode",
+    "precision",
+    "recall",
+    "deployment",
+    "observability",
+    "throughput",
+    "quantization",
+    "vector search",
+    "reranking",
+    "chunking",
+    "grounding",
+    "tokenization",
+    "context window"
+  ],
+  "implementation_keywords": [
+    "built",
+    "deployed",
+    "measured",
+    "tested",
+    "implemented",
+    "production",
+    "experiment",
+    "case study",
+    "pipeline",
+    "results",
+    "open source",
+    "reproduce"
+  ],
+  "discussion_keywords": [
+    "question",
+    "limitation",
+    "limitations",
+    "challenge",
+    "challenges",
+    "unresolved",
+    "trade-off",
+    "tradeoff",
+    "lessons learned",
+    "disagree",
+    "debate",
+    "alternative",
+    "trade-offs"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "feeds": [
+    {
+      "name": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "enabled": true
+    },
+    {
+      "name": "ArXiv cs.CL",
+      "url": "https://export.arxiv.org/rss/cs.CL",
+      "enabled": true
+    },
+    {
+      "name": "ArXiv cs.AI",
+      "url": "https://export.arxiv.org/rss/cs.AI",
+      "enabled": true
+    },
+    {
+      "name": "Hacker News Frontpage",
+      "url": "https://hnrss.org/frontpage",
+      "enabled": true
+    }
+  ]
+}
