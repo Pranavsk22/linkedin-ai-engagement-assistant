@@ -85,14 +85,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="LinkedIn AI Engagement Assistant - Discovery Engine")
     parser.add_argument("--limit", type=int, default=20, help="Maximum number of candidate posts to produce (default: 20)")
     parser.add_argument("--min-score", type=int, default=0, help="Minimum score threshold (e.g. 55 for review queue)")
+    parser.add_argument("--max-age-days", type=float, default=7.0, help="Maximum age of candidate posts in days (default: 7.0 for within the same week)")
     parser.add_argument("--output-json", type=str, default="", help="Path to save results as JSON")
     parser.add_argument("--output-csv", type=str, default="", help="Path to save results as CSV")
     parser.add_argument("--local-only", action="store_true", help="Force local mode, skipping cloud upload even if credentials exist")
 
     args = parser.parse_args(argv)
 
-    logger.info("Starting feed discovery job (limit=%d, min_score=%d)...", args.limit, args.min_score)
-    posts, stats = fetch_all_feeds(limit=args.limit, min_score=args.min_score)
+    logger.info("Starting feed discovery job (limit=%d, min_score=%d, max_age_days=%.1f)...", args.limit, args.min_score, args.max_age_days)
+    posts, stats = fetch_all_feeds(limit=args.limit, min_score=args.min_score, max_age_days=args.max_age_days)
 
     print("\n" + "=" * 50)
     print("DISCOVERY JOB EXECUTION SUMMARY")
@@ -100,6 +101,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"Feeds attempted:       {stats['feeds_attempted']}")
     print(f"Feeds successful:      {stats['feeds_successful']}")
     print(f"Total items parsed:    {stats['total_items_parsed']}")
+    print(f"Stale items skipped:   {stats.get('stale_skipped', 0)}")
     print(f"Duplicates skipped:    {stats['duplicates_skipped']}")
     print(f"Ranked candidates:     {stats['candidates_scored']}")
     print("=" * 50 + "\n")

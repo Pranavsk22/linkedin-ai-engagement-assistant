@@ -2,8 +2,9 @@
 
 import json
 from pathlib import Path
+from datetime import datetime, timezone
 import pytest
-from discovery.fetch_feeds import fetch_all_feeds, fetch_single_feed
+from discovery.fetch_feeds import fetch_all_feeds, fetch_single_feed, is_within_max_age
 from discovery.upload import export_to_csv, export_to_json
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
@@ -100,3 +101,90 @@ def test_json_and_csv_export(tmp_path):
     content = csv_path.read_text(encoding="utf-8")
     assert "Scaling Hybrid Search" in content
     assert "abc1234567890def" in content
+
+
+def test_is_within_max_age():
+    ref_time = datetime(2026, 11, 21, 12, 0, 0, tzinfo=timezone.utc)
+
+    # 1 day ago -> within 7 days
+    assert is_within_max_age("2026-11-20T12:00:00Z", max_age_days=7.0, reference_time=ref_time) is True
+    # 6.5 days ago -> within 7 days
+    assert is_within_max_age("2026-11-15T00:00:00Z", max_age_days=7.0, reference_time=ref_time) is True
+    # 8 days ago -> older than 7 days, must be rejected
+    assert is_within_max_age("2026-11-13T12:00:00Z", max_age_days=7.0, reference_time=ref_time) is False
+    # None date -> rejected
+    assert is_within_max_age(None, max_age_days=7.0, reference_time=ref_time) is False
+    # Invalid string -> rejected
+    assert is_within_max_age("not-a-date", max_age_days=7.0, reference_time=ref_time) is False
+
+
+def test_fetch_all_feeds_filters_stale_posts(tmp_path):
+    ref_time = datetime(2026, 11, 21, 12, 0, 0, tzinfo=timezone.utc)
+    xml_content = """<?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0">
+      <channel>
+        <title>Weekly AI</title>
+        <link>https://example.com</link>
+        <item>
+          <title>Fresh RAG Article from Today</title>
+          <link>https://example.com/fresh-post</link>
+          <description>Recent breakthroughs in hybrid vector search and retrieval.</description>
+          <pubDate>Fri, 20 Nov 2026 12:00:00 GMT</pubDate>
+        </item>
+        <item>
+          <title>Old RAG Article from Last Month</title>
+          <link>https://example.com/old-post</link>
+          <description>Old benchmarks on retrieval evaluation.</description>
+          <pubDate>Thu, 01 Oct 2026 12:00:00 GMT</pubDate>
+        </item>
+      </channel>
+    </rss>
+    """
+    feed_path = tmp_path / "weekly.xml"
+    feed_path.write_text(xml_content, encoding="utf-8")
+
+    custom_feeds = [{"name": "Weekly AI", "url": "https://example.com/feed.xml", "enabled": True}]
+
+    # Mock fetch_single_feed using monkeypatch or direct fixture content
+    from unittest.mock import patch
+
+    with patch("discovery.fetch_feeds.fetch_single_feed") as mock_fetch:
+        mock_fetch.return_value = [
+            {
+                "id": "fresh1",
+                "canonical_url": "https://example.com/fresh-post",
+                "post_url": "https://example.com/fresh-post",
+                "source_name": "Weekly AI",
+                "author_name": None,
+                "title": "Fresh RAG Article from Today",
+                "post_text": "Recent breakthroughs in hybrid vector search and retrieval.",
+                "published_at": "2026-11-20T12:00:00Z",
+                "discovered_at": "2026-11-21T12:00:00Z",
+            },
+            {
+                "id": "old1",
+                "canonical_url": "https://example.com/old-post",
+                "post_url": "https://example.com/old-post",
+                "source_name": "Weekly AI",
+                "author_name": None,
+                "title": "Old RAG Article from Last Month",
+                "post_text": "Old benchmarks on retrieval evaluation.",
+                "published_at": "2026-10-01T12:00:00Z",
+                "discovered_at": "2026-11-21T12:00:00Z",
+            },
+        ]
+
+        ranked, stats = fetch_all_feeds(
+            feeds_config=custom_feeds,
+            limit=10,
+            min_score=0,
+            max_age_days=7.0,
+            reference_time=ref_time,
+        )
+
+        # Only the fresh post should be kept; the old post from Oct 1 must be skipped as stale
+        assert len(ranked) == 1
+        assert ranked[0]["title"] == "Fresh RAG Article from Today"
+        assert stats["stale_skipped"] == 1
+        assert stats["candidates_scored"] == 1
+

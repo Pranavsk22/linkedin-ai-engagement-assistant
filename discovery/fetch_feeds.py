@@ -5,6 +5,8 @@ import logging
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime, timezone
+from dateutil import parser as date_parser
 import feedparser
 import requests
 
@@ -88,13 +90,53 @@ def fetch_single_feed(
     return items
 
 
+def is_within_max_age(
+    published_at: Optional[str],
+    max_age_days: float = 7.0,
+    reference_time: Optional[datetime] = None,
+) -> bool:
+    """Return True if published_at is a valid timestamp within max_age_days."""
+    if not published_at:
+        return False
+    try:
+        if isinstance(published_at, datetime):
+            pub_dt = published_at
+        else:
+            pub_dt = date_parser.parse(str(published_at).strip())
+
+        if pub_dt.tzinfo is None:
+            pub_dt = pub_dt.replace(tzinfo=timezone.utc)
+        else:
+            pub_dt = pub_dt.astimezone(timezone.utc)
+    except Exception:
+        return False
+
+    ref_dt = reference_time or datetime.now(timezone.utc)
+    if ref_dt.tzinfo is None:
+        ref_dt = ref_dt.replace(tzinfo=timezone.utc)
+    else:
+        ref_dt = ref_dt.astimezone(timezone.utc)
+
+    delta = (ref_dt - pub_dt).total_seconds()
+    if delta < -7200:
+        # Future anomaly (> 2 hours in the future)
+        return False
+
+    days = max(0.0, delta / 86400.0)
+    return days <= max_age_days
+
+
 def fetch_all_feeds(
     feeds_config: Optional[List[Dict[str, Any]]] = None,
     topics_config: Optional[dict] = None,
     limit: int = 20,
     min_score: int = 0,
+    max_age_days: Optional[float] = 7.0,
+    reference_time: Optional[datetime] = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Fetch all enabled feeds, deduplicate by canonical URL, score, and rank.
+
+    Only candidates published within max_age_days are retained.
 
     Returns:
         (ranked_posts, execution_stats)
@@ -106,6 +148,7 @@ def fetch_all_feeds(
         "feeds_attempted": 0,
         "feeds_successful": 0,
         "total_items_parsed": 0,
+        "stale_skipped": 0,
         "duplicates_skipped": 0,
         "candidates_scored": 0,
     }
@@ -132,12 +175,23 @@ def fetch_all_feeds(
             stats["total_items_parsed"] += 1
             canonical_url = item["canonical_url"]
 
+            # Filter out stale items older than max_age_days (within the week)
+            if max_age_days is not None:
+                if not is_within_max_age(
+                    item.get("published_at"),
+                    max_age_days=max_age_days,
+                    reference_time=reference_time,
+                ):
+                    stats["stale_skipped"] += 1
+                    continue
+
             # Calculate score for this item
             score, breakdown, matched_topics = score_post(
                 title=item["title"],
                 text=item["post_text"],
                 published_at=item["published_at"],
                 config=topics_cfg,
+                reference_time=reference_time,
             )
 
             scored_item = dict(item)
