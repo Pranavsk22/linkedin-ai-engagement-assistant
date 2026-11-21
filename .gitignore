@@ -13,3 +13,5 @@ output.json
 output.csv
 *.csv
 discovery_output.*
+[Ss]ecrets/
+*.secret
