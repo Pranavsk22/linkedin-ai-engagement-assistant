@@ -20,4 +20,5 @@ discovery_output.*
 LINKEDIN_AI_ENGAGEMENT_ASSISTANT_SPEC.md
 LIST_OF_WORKS_DONE.md
 USER_ACTION_REQUIRED.md
-prompts/Pranav_Technical_Profile.md
+prompts/
+config/profile_context.md

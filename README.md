@@ -37,7 +37,7 @@ A zero-cost, cloud-hosted research and drafting assistant. Discovers high-signal
 - [x] **Milestone 0: Repository & Architecture Planning**
   - Project directory layout and task checklist
   - Environment configuration (`config/topics.json`, `config/feeds.json`)
-  - Claude persona prompt (`prompts/engagement_persona.md`)
+  - Claude persona & engagement guidelines
   - Database schema (`worker/migrations/0001_init.sql`)
   - GitHub Actions definitions (`.github/workflows/`)
 - [x] **Milestone 1: Discovery Engine**
@@ -46,10 +46,10 @@ A zero-cost, cloud-hosted research and drafting assistant. Discovers high-signal
   - Deterministic 0-100 relevance scoring rubric
   - RSS parser with timeout and failure resilience
   - Local JSON/CSV export runner and unit test suite
-- [ ] **Milestone 2: Cloudflare Worker & D1 Backend**
-- [ ] **Milestone 3: Remote MCP Tools Implementation**
-- [ ] **Milestone 4: Cloud Deployment & Claude Connection**
-- [ ] **Milestone 5: GitHub Actions Cloud Automation**
+- [x] **Milestone 2: Cloudflare Worker & D1 Backend**
+- [x] **Milestone 3: Remote MCP Tools Implementation**
+- [x] **Milestone 4: Cloud Deployment & Claude Connection**
+- [x] **Milestone 5: GitHub Actions Cloud Automation**
 - [ ] **Milestone 6: Prompt Tuning & Evaluation**
 
 ---
