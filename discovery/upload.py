@@ -15,6 +15,7 @@ from typing import List, Optional
 import requests
 
 from discovery.fetch_feeds import fetch_all_feeds
+from discovery.fetch_google_linkedin import fetch_linkedin_posts_from_google
 
 logging.basicConfig(
     level=logging.INFO,
@@ -95,6 +96,22 @@ def main(argv: Optional[List[str]] = None) -> int:
     logger.info("Starting feed discovery job (limit=%d, min_score=%d, max_age_days=%.1f)...", args.limit, args.min_score, args.max_age_days)
     posts, stats = fetch_all_feeds(limit=args.limit, min_score=args.min_score, max_age_days=args.max_age_days)
 
+    # Attempt Google Search discovery for real, direct LinkedIn posts
+    linkedin_posts = fetch_linkedin_posts_from_google()
+    if linkedin_posts:
+        combined_by_url = {p["canonical_url"]: p for p in posts}
+        for lp in linkedin_posts:
+            if lp["canonical_url"] not in combined_by_url or lp["relevance_score"] > combined_by_url[lp["canonical_url"]]["relevance_score"]:
+                combined_by_url[lp["canonical_url"]] = lp
+
+        all_combined = list(combined_by_url.values())
+        if args.min_score > 0:
+            all_combined = [p for p in all_combined if p["relevance_score"] >= args.min_score]
+        all_combined.sort(key=lambda p: (p["relevance_score"], p.get("published_at") or ""), reverse=True)
+        posts = all_combined[:args.limit]
+        stats["linkedin_posts_discovered"] = len(linkedin_posts)
+        stats["candidates_scored"] = len(posts)
+
     print("\n" + "=" * 50)
     print("DISCOVERY JOB EXECUTION SUMMARY")
     print("=" * 50)
@@ -102,6 +119,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"Feeds successful:      {stats['feeds_successful']}")
     print(f"Total items parsed:    {stats['total_items_parsed']}")
     print(f"Stale items skipped:   {stats.get('stale_skipped', 0)}")
+    if "linkedin_posts_discovered" in stats:
+        print(f"LinkedIn posts added:  {stats['linkedin_posts_discovered']}")
     print(f"Duplicates skipped:    {stats['duplicates_skipped']}")
     print(f"Ranked candidates:     {stats['candidates_scored']}")
     print("=" * 50 + "\n")

@@ -273,6 +273,7 @@ export async function handleToolCall(
           "Do NOT claim implementing RLHF or pre-training models from scratch.",
           "Do NOT claim production cloud LLMOps (Bedrock, SageMaker) - coursework labs only.",
           "Always state when numbers come from synthetic datasets or specific benchmark splits.",
+          "Strict headline alignment: Comments must address the primary thesis or headline of the post. Never extract buried footnotes or obscure benchmarks from digests to force a connection. If the post is primarily about valuation, revenue, or executive news with no engineering angle, recommend skipping it.",
         ],
       };
     }

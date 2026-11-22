@@ -25,6 +25,11 @@ TRACKING_QUERY_PARAMS = {
     "ref_src",
     "source",
     "feature",
+    "trackingId",
+    "trackingid",
+    "trk",
+    "rcm",
+    "originalSubdomain",
 }
 
 

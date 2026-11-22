@@ -34,5 +34,7 @@ jobs:
         env:
           INGEST_URL: ${{ secrets.INGEST_URL }}
           INGEST_BEARER_TOKEN: ${{ secrets.INGEST_BEARER_TOKEN }}
+          GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+          GOOGLE_SEARCH_CX: ${{ secrets.GOOGLE_SEARCH_CX }}
           RSS_FEEDS: ${{ vars.RSS_FEEDS }}
         run: python -m discovery.upload
